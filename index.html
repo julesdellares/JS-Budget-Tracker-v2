@@ -5,16 +5,72 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
+
+<!-- Container for the App -->
     <div class="app">
     <h1> Expenses Tracker</h1>
-
+    <h3> Furry Financial Rehab Services </h3>
+<!-- Shows total balance -->
         <div class="balance-container">
             <h2>Your Balance</h2>
             <div id="balance"> $120 </div>
         </div>
-
+<!-- Shows how much money is coming in/out   -->
+        <div clas="cashflow">
+<!-- Money coming in -->
+            <div class="income-container">
+                <h2> Income </h2>
+                <div id="income"> $200 </div>
+            </div>
+<!-- Money going out -->
+            <div class="expense-container">
+                <h2> Expenses </h2>
+                <div id="expense"> $100</div>
+            </div>
+         </div>
+<!-- List of money moves -->
+    <div class="transaction-container">
+        <h2> Transaction History </h2>
+        <ul>
+            <li>
+                Salary
+                <div>
+                    <span class="income-amt"> $350 </span>
+                    <button> [x] </button>
+                </div>
+            </li>
+            <li>
+                Grocery
+                <div>
+                    <span class="expense-amt"> $45 </span>
+                    <button> [x] </button>
+                </div>
+            </li>
+            <li>
+               Art Materials
+               <div>
+                   <span class="expense-amt"> $20 </span>
+                   <button> [x] </button>
+               </div> 
+            </li>
+        </ul>
     </div>
-</body>
-</html>
+<!-- Add a new money move -->
+    <div class="form-container">
+        <h2> Add New Transaction </h2>
+        <form>
+            <label for="name"> Name </label>
+            <input id="name" type="text">
+            <label for="amount" type="number"> Amount </label>
+            <input id="amount" type="number">
+            <button id="incomeBtn"> Add Income </button>
+            <Button id="expenseBtn"> Add Expense </Button> 
+        </form>
+    </div>
+
+</div>
+    </body>
+        </html>
