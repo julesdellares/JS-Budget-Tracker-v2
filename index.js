@@ -1,10 +1,10 @@
 var state = {
-   balance: 1000,
-   income: 400,
-   expense: 100,
-   transactions: [
-
-   ]
+    balance: 1000,
+    income: 400,
+    expense: 100,
+    transactions: [
+        
+    ]
 }
 
 var balanceEl = document.querySelector('#balance');
@@ -16,13 +16,18 @@ var expenseBtnEl = document.querySelector('#expenseBtn');
 var nameInputEl = document.querySelector('#name');
 var amountInputEl = document.querySelector('#amount');
 
-function init() {   
+function init() {
+    var localState = JSON.parse(localStorage.getItem('expenseTrackerState'));
+
+    if (localState !== null) {
+        state = localState;
+    }
     updateState();
     initListeners();
 }
 
 function uniqueId() {
-    return (Math.random() * 1000000);
+    return Math.round(Math.random() * 1000000);
 }
 
 function initListeners() {
@@ -30,57 +35,57 @@ function initListeners() {
     expenseBtnEl.addEventListener('click', onAddExpenseClick);
 }
 
-//dry don't repeat yourself 
-
+// DRY - Do not repeat yourself
 
 function onAddIncomeClick() {
     addTransaction(nameInputEl.value, amountInputEl.value, 'income');
-     }
-
-
-function onDeleteClick(event) {
-    var id = event.target.getAttribute('data-id');
 }
-
 
 function addTransaction(name, amount, type) {
     if (name !== '' && amount !== '') {
-        var transaction = {
-            name: name,
-            amount: parseInt(amount),
+        var transaction = { 
+            id: uniqueId(),
+            name: name, 
+            amount: parseInt(amount), 
             type: type
         };
-    };
+
+        state.transactions.push(transaction);
+
+        updateState();
+    } else {
+        alert('Please enter valid data');
+    }
+
+    nameInputEl.value = '';
+    amountInputEl.value = '';
 }
 
 function onAddExpenseClick() {
-    var name = nameInputEl.value;
-    var amount = amountInputEl.value;
-    if ( name !== '' && amount !== '') {
-        var transaction = {
-            name: nameInputEl.value,
-            amount: parseInt(amountInputEl.value), type: 'income'
-        };
-     }
-
-
-    state.transactions.push(transaction);
-
-    updateState();
-} else {
-    alert('Please enter valid information');
+    addTransaction(nameInputEl.value, amountInputEl.value, 'expense');
 }
 
-nameInputEl.value = '';
-amountInputEl.value = '';
+function onDeleteClick(event) {
+    var id = parseInt(event.target.getAttribute('data-id'));
+    var deleteIndex;
+    for (var i = 0; i < state.transactions.length; i++) {
+        if (state.transactions[i].id === id) {
+            deleteIndex = i;
+            break;
+        }
+    }
 
+    state.transactions.splice(deleteIndex, 1);
 
+    updateState();
+}
 
 function updateState() {
     var balance = 0,
         income = 0,
         expense = 0,
         item;
+
     for (var i = 0; i < state.transactions.length; i++) {
         item = state.transactions[i];
 
@@ -96,6 +101,10 @@ function updateState() {
     state.balance = balance;
     state.income = income;
     state.expense = expense;
+
+    localStorage.setItem('expenseTrackerState', JSON.stringify(state))
+
+    render();
 }
 
 function render() {
@@ -103,11 +112,9 @@ function render() {
     incomeEl.innerHTML = `$${state.income}`;
     expenseEl.innerHTML = `$${state.expense}`;
 
-    var transactionsEl, containerEl, amountEl, item, btnEl;
+    var transactionEl, containerEl, amountEl, item, btnEl;
 
-transactionsEl.innerHTML = '';
-
-    
+    transactionsEl.innerHTML = '';
 
     for (var i = 0; i < state.transactions.length; i++) {
         item = state.transactions[i];
@@ -137,10 +144,6 @@ transactionsEl.innerHTML = '';
 
         transactionEl.appendChild(containerEl);
     }
-
 }
 
 init();
-
-
-
